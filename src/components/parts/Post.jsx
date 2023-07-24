@@ -6,8 +6,9 @@ import { PiShareFat } from "react-icons/pi";
 import { getTimeAgo } from "@/helper/timehelper";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import Commentsection from "./Commentsection";
 
-function Post({ content, showComment, setShowComment }) {
+function Post({ content }) {
   return (
     <div className="border border-b-gray-400 bg-white flex flex-row">
       <div className="bg-slate-200 w-14 flex flex-col justify-start items-center text-xl py-2 gap-2">
@@ -36,54 +37,12 @@ function Post({ content, showComment, setShowComment }) {
           </div>
 
           {/* Comment and Share */}
-          <div>
-            <div className="flex flex-row gap-3 text-2xl p-2">
-              <BiComment
-                className="scale-80 hover:scale-120 cursor-pointer"
-                onClick={() => setShowComment(content.id)}
-              />
-              <PiShareFat className="scale-80 hover:scale-120 cursor-pointer" />
-            </div>
-
-            {showComment === content.id && (
-              <div>
-                <div className="p-2 pl-4">
-                  <div>
-                    <div className="flex flex-row gap-2">
-                      <Avatar className="h-4 w-4">
-                        <AvatarImage src="https://github.com/shadcn.png" />
-                        <AvatarFallback>CN</AvatarFallback>
-                      </Avatar>
-                      <div>Karthik</div>
-                      <div>10hrs ago</div>
-                    </div>
-                    <div className="pl-6">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor{" "}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex flex-row gap-2">
-                      <Avatar className="h-4 w-4">
-                        <AvatarImage src="https://github.com/shadcn.png" />
-                        <AvatarFallback>CN</AvatarFallback>
-                      </Avatar>
-                      <div>Karthik</div>
-                      <div>10hrs ago</div>
-                    </div>
-                    <div className="pl-6">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor eiusmod tempor eiusmod tempor{" "}
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-slate-200 flex flex-row gap-4 p-2">
-                  <Input />
-                  <Button>send</Button>
-                </div>
-              </div>
-            )}
-          </div>
+          <Commentsection
+            // showComment={showComment} handleComment={handleComment}
+            commentscount={content.comments.length}
+            postId={content.id}
+            authorId={content.authorId}
+          />
         </div>
       </div>
     </div>

@@ -11,18 +11,18 @@ datasource db {
 }
 
 model Account {
-  id                 String  @id @default(cuid()) @map("_id") 
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  
-  access_token       String?  
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?
-  session_state      String?
+  id                String  @id @default(cuid()) @map("_id")
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -38,7 +38,7 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())@map("_id")
+  id            String    @id @default(cuid()) @map("_id")
   name          String?
   email         String?   @unique
   emailVerified DateTime?
@@ -46,15 +46,27 @@ model User {
   accounts      Account[]
   sessions      Session[]
   posts         Post[]
+  comments      Comment[] @relation("UserComments")
 }
 
-
 model Post {
-  id        String      @id @default(cuid()) @map("_id")
+  id          String    @id @default(cuid()) @map("_id")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  title       String
+  description String
+  author      User?     @relation(fields: [authorId], references: [id])
+  authorId    String?
+  comments    Comment[] @relation("PostComments")
+}
+
+model Comment {
+  id        String   @id @default(cuid()) @map("_id")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  title     String
-  description String   
-  author    User?    @relation(fields: [authorId], references: [id])
+  content   String
+  post      Post?    @relation("PostComments", fields: [postId], references: [id])
+  postId    String?
+  author    User?    @relation("UserComments", fields: [authorId], references: [id])
   authorId  String?
 }

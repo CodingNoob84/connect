@@ -1,144 +1,91 @@
 "use client";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import Createpost from "../parts/Createpost";
 import Post from "../parts/Post";
 import { Button } from "../ui/button";
 import axios from "axios";
-import { fetchPosts } from "@/lib/dbservices";
+import { fetchPosts, getComments, getPosts } from "@/lib/dbservices";
 import SkeletonPost from "../parts/Skeletonpost";
-import { useQuery } from "@tanstack/react-query";
-
-const Posts = [
-  {
-    id: "clk9pjzx9000bjf38u9wx34z8",
-    createdAt: "2023-07-19T12:36:51.741Z",
-    updatedAt: "2023-07-19T12:36:51.741Z",
-    title: "sixth title",
-    description: "sixth description",
-    authorId: "clk84hncy0000jfyoljzhmmev",
-    author: {
-      image:
-        "https://lh3.googleusercontent.com/a/AAcHTtezN1mjrOk0CA_bvMcsUy5CLA3WvVNQmN3MYnlo9WOXzSQ=s96-c",
-      name: "Karthik Kumar",
-    },
-  },
-  {
-    id: "clk9p7bmw0009jf38ink1ck06",
-    createdAt: "2023-07-19T12:27:00.393Z",
-    updatedAt: "2023-07-19T12:27:00.393Z",
-    title: "fifth title",
-    description: "fifth description",
-    authorId: "clk84hncy0000jfyoljzhmmev",
-    author: {
-      image:
-        "https://lh3.googleusercontent.com/a/AAcHTtezN1mjrOk0CA_bvMcsUy5CLA3WvVNQmN3MYnlo9WOXzSQ=s96-c",
-      name: "Karthik Kumar",
-    },
-  },
-  {
-    id: "clk9msr4m0007jf38fg5zd48v",
-    createdAt: "2023-07-19T11:19:41.398Z",
-    updatedAt: "2023-07-19T11:19:41.398Z",
-    title: "hello",
-    description: "hello everyone",
-    authorId: "clk84hncy0000jfyoljzhmmev",
-    author: {
-      image:
-        "https://lh3.googleusercontent.com/a/AAcHTtezN1mjrOk0CA_bvMcsUy5CLA3WvVNQmN3MYnlo9WOXzSQ=s96-c",
-      name: "Karthik Kumar",
-    },
-  },
-  {
-    id: "clk9mine0000bjffw0789pddf",
-    createdAt: "2023-07-19T11:11:48.309Z",
-    updatedAt: "2023-07-19T11:11:48.309Z",
-    title: "third post title",
-    description: "third post description",
-    authorId: "clk84hncy0000jfyoljzhmmev",
-    author: {
-      image:
-        "https://lh3.googleusercontent.com/a/AAcHTtezN1mjrOk0CA_bvMcsUy5CLA3WvVNQmN3MYnlo9WOXzSQ=s96-c",
-      name: "Karthik Kumar",
-    },
-  },
-  {
-    id: "clk9j7msz0003jffwnmahssj8",
-    createdAt: "2023-07-19T09:39:17.171Z",
-    updatedAt: "2023-07-19T09:39:17.171Z",
-    title: "second post title",
-    description: "second post description",
-    authorId: "clk84hncy0000jfyoljzhmmev",
-    author: {
-      image:
-        "https://lh3.googleusercontent.com/a/AAcHTtezN1mjrOk0CA_bvMcsUy5CLA3WvVNQmN3MYnlo9WOXzSQ=s96-c",
-      name: "Karthik Kumar",
-    },
-  },
-  {
-    id: "clk9j71ae0001jffwv3hj7rlx",
-    createdAt: "2023-07-19T09:38:49.285Z",
-    updatedAt: "2023-07-19T09:38:49.285Z",
-    title: "first post title",
-    description: "first post description",
-    authorId: "clk84hncy0000jfyoljzhmmev",
-    author: {
-      image:
-        "https://lh3.googleusercontent.com/a/AAcHTtezN1mjrOk0CA_bvMcsUy5CLA3WvVNQmN3MYnlo9WOXzSQ=s96-c",
-      name: "Karthik Kumar",
-    },
-  },
-];
-
-export const getPosts = () => {
-  const waitTenSeconds = new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(Posts);
-    }, 3000); // 10 seconds in milliseconds
-  });
-
-  return waitTenSeconds;
-};
+import { useInView } from "react-intersection-observer";
 
 function Scrollablecontent() {
+  const { ref, inView } = useInView();
+  // const {
+  //   data: posts,
+  //   isLoading,
+  //   isFetching,
+  //   error,
+  // } = useQuery(["posts"], fetchPosts); // Add the queryFn fetchPosts here
+
   const {
-    data: posts,
+    data,
     isLoading,
-    isFetching,
+    isSuccess,
     error,
-  } = useQuery(["posts"], getPosts);
-  //const [posts, setPosts] = useState([]);
-  const [showComment, setShowComment] = useState("");
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery({
+    queryKey: ["posts"],
+    queryFn: ({ pageParam = 1 }) => getPosts(pageParam),
+    getNextPageParam: (lastPage, allPages) => {
+      const nextPage = lastPage.length === 5 ? allPages.length + 1 : undefined;
+      return nextPage;
+    },
+  });
 
-  // useEffect(() => {
-  //   async function getPosts() {
-  //     //const fetchedPosts = await fetchPosts();
-  //     //console.log(fetchedPosts)
-  //     //setPosts(fetchedPosts);
-  //     setPosts(Posts)
+  // const [showComment, setShowComment] = useState("");
+
+  // const handleComment=(id)=>{
+  //   if(showComment===id){
+  //     setShowComment("")
+  //   }else{
+  //     setShowComment(id)
   //   }
-  //   getPosts();
-  // }, []);
+  // }
+  //console.log("comment_postid",showComment)
 
-  async function handleNewPostCreated() {
-    const fetchedPosts = await fetchPosts(baseurl);
-    setPosts(fetchedPosts);
-  }
+  const handleLoadMore = () => {
+    fetchNextPage();
+  };
 
   return (
     <div className="flex flex-col gap-2">
-      <Createpost onPostCreated={handleNewPostCreated} />
+      <Createpost />
       <div className="flex flex-col gap-4">
-        {isFetching
-          ? Array.from({ length: 5 }).map((i) => <SkeletonPost key={i} />)
+        {isFetching &&
+          Array.from({ length: 5 }).map((_, i) => <SkeletonPost key={i} />)}
+        {isSuccess &&
+          data.pages.map((page) =>
+            page.map((post, i) => (
+              <Post
+                key={post.id} // Ensure the key prop is set to a unique value
+                content={post}
+              />
+            ))
+          )}
+        {isFetchingNextPage &&
+          Array.from({ length: 5 }).map((_, i) => <SkeletonPost key={i} />)}
+        {/* {isLoading
+          ? Array.from({ length: 5 }).map((_, i) => <SkeletonPost key={i} />)
           : posts?.map((post) => (
               <Post
-                key={post.id}
+                key={post.id} // Ensure the key prop is set to a unique value
                 content={post}
-                showComment={showComment}
-                setShowComment={setShowComment}
+                // showComment={showComment}
+                // handleComment={handleComment}
               />
-            ))}
+            ))} */}
       </div>
+      {/* Render a "Load More" button when there is more data to fetch */}
+      {hasNextPage && (
+        <Button onClick={handleLoadMore} disabled={isFetchingNextPage}>
+          {isFetchingNextPage ? "Loading..." : "Load More"}
+        </Button>
+      )}
     </div>
   );
 }
