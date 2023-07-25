@@ -37,14 +37,21 @@ function Likesection({ likes, userId, postId }) {
       setIsLiked(val);
     }
     const data = {
-      isLiked: val,
+      isLiked: isLiked === val ? "" : val,
       postId: postId,
       userId: userId,
     };
-    const result = await crudLikes(data);
-    setLikesArray(result?.result);
-    //console.log(result?.result);
+
+    // Call the API to update the like
+    try {
+      const result = await crudLikes(data);
+      setLikesArray(result?.result);
+      console.log(result?.result);
+    } catch (error) {
+      console.error("Error updating like:", error);
+    }
   };
+
   //console.log(isLiked);
   return (
     <div className="bg-slate-200 w-14 flex flex-col justify-start items-center text-xl py-2 gap-2">
@@ -54,7 +61,9 @@ function Likesection({ likes, userId, postId }) {
         }  scale-75 hover:scale-100 hover:text-red-400 cursor-pointer`}
         onClick={() => handleLike("1")}
       />
-      <div className="text-sm">{totalIsLiked(likesArray)}</div>{" "}
+      <div className="text-sm cursor-pointer w-7 h-7 rounded-full flex justify-center items-center hover:bg-slate-300">
+        <p className="text-center">{totalIsLiked(likesArray)}</p>
+      </div>{" "}
       <ImArrowDown
         className={`${
           isLiked === "0" && "text-red-500"
