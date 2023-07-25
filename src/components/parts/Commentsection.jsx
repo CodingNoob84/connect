@@ -12,10 +12,10 @@ import { Skeleton } from "../ui/skeleton";
 import { getTimeAgo } from "@/helper/timehelper";
 import { useSession } from "next-auth/react";
 
-function Commentsection({ commentscount, postId, authorId }) {
+function Commentsection({ commentscount, postId, userId }) {
   const datasession = useSession();
-  console.log(datasession);
-  console.log(datasession.data.user.id);
+  //console.log(datasession);
+  //console.log(datasession.data.user.id);
   const commentref = useRef("");
   const [showComment, setShowComment] = useState("");
   const [btnloading, setBtnloading] = useState(false);
@@ -47,7 +47,7 @@ function Commentsection({ commentscount, postId, authorId }) {
     const data = {
       content: commentref?.current?.value,
       postId: postId,
-      authorId: datasession?.data?.user?.id,
+      authorId: userId,
     };
     try {
       // Call the createComment mutation function

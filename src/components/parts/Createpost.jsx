@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -17,28 +17,15 @@ import {
 
 import { createPost, fetchPosts, getPosts } from "@/lib/dbservices";
 
-// const data = {
-//   user: {
-//     name: "Karthik Kumar",
-//     email: "karthithelearner@gmail.com",
-//     image:
-//       "https://lh3.googleusercontent.com/a/AAcHTtezN1mjrOk0CA_bvMcsUy5CLA3WvVNQmN3MYnlo9WOXzSQ=s96-c",
-//     id: "clk84hncy0000jfyoljzhmmev",
-//   },
-//   expires: "2023-08-19T09:30:20.617Z",
-// };
-
-function Createpost() {
+function Createpost({ userId }) {
   const { refetch } = useInfiniteQuery({
     queryKey: ["posts"],
     queryFn: () => getPosts(1),
   });
-  //const { refetch } = useQuery(["posts"], fetchPosts);
+  //const [userId, setUserId] = useState("clk84hncy0000jfyoljzhmmev");
   const [cpShow, setCpShow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { data } = useSession();
-  console.log("created");
-  console.log(data);
+
   const titleref = useRef();
   const descref = useRef();
 
@@ -73,7 +60,7 @@ function Createpost() {
     const postData = {
       title: titleref.current.value,
       description: descref.current.value,
-      authorId: data?.user?.id,
+      authorId: userId,
     };
     createPostMutation.mutate(postData);
   };

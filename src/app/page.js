@@ -4,6 +4,7 @@ import Navbar from "@/components/segments/Navbar";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { AuthOptions } from "./api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 // const session={
 //   user: {
@@ -15,13 +16,15 @@ import { AuthOptions } from "./api/auth/[...nextauth]/route";
 // }
 
 export default async function Home() {
-  const session = await getServerSession(AuthOptions)
-  console.log("session");
+  const session = await getServerSession(AuthOptions);
   console.log(session)
+  if(!session){
+    redirect("/login")
+  }
   return (
     <main className="max-w-screen min-h-screen bg-slate-100 p-2">
       <Navbar session={session} />
-      <Bodycontent />
+      <Bodycontent userId={session?.user?.id} />
       <Footer />
     </main>
   );

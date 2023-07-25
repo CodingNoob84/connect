@@ -9,14 +9,8 @@ import { fetchPosts, getComments, getPosts } from "@/lib/dbservices";
 import SkeletonPost from "../parts/Skeletonpost";
 import { useInView } from "react-intersection-observer";
 
-function Scrollablecontent() {
+function Scrollablecontent({ userId }) {
   const { ref, inView } = useInView();
-  // const {
-  //   data: posts,
-  //   isLoading,
-  //   isFetching,
-  //   error,
-  // } = useQuery(["posts"], fetchPosts); // Add the queryFn fetchPosts here
 
   const {
     data,
@@ -54,7 +48,7 @@ function Scrollablecontent() {
 
   return (
     <div className="flex flex-col gap-2">
-      <Createpost />
+      <Createpost userId={userId} />
       <div className="flex flex-col gap-4">
         {isFetching &&
           Array.from({ length: 5 }).map((_, i) => <SkeletonPost key={i} />)}
@@ -64,21 +58,12 @@ function Scrollablecontent() {
               <Post
                 key={post.id} // Ensure the key prop is set to a unique value
                 content={post}
+                userId={userId}
               />
             ))
           )}
         {isFetchingNextPage &&
           Array.from({ length: 5 }).map((_, i) => <SkeletonPost key={i} />)}
-        {/* {isLoading
-          ? Array.from({ length: 5 }).map((_, i) => <SkeletonPost key={i} />)
-          : posts?.map((post) => (
-              <Post
-                key={post.id} // Ensure the key prop is set to a unique value
-                content={post}
-                // showComment={showComment}
-                // handleComment={handleComment}
-              />
-            ))} */}
       </div>
       {/* Render a "Load More" button when there is more data to fetch */}
       {hasNextPage && (

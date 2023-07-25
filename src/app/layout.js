@@ -2,6 +2,7 @@ import AuthProvider from "@/provider/Authprovider";
 import ReactQueryProvider from "@/provider/ReactQueryProvider";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
         <ReactQueryProvider>
           <AuthProvider>{children}</AuthProvider>
         </ReactQueryProvider>
+        <Toaster />
       </body>
     </html>
   );

@@ -13,8 +13,6 @@ export async function fetchPosts() {
   }
 
   export async function getPosts(page) {
-    console.log("page")
-    console.log(page)
     try {
       const response = await axios.get(`api/post?page=${page}`);
       return response.data.result;

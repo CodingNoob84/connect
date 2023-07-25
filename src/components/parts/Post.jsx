@@ -8,7 +8,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Commentsection from "./Commentsection";
 
-function Post({ content }) {
+function Post({ content, userId }) {
   return (
     <div className="border border-b-gray-400 bg-white flex flex-row">
       <div className="bg-slate-200 w-14 flex flex-col justify-start items-center text-xl py-2 gap-2">
@@ -41,7 +41,7 @@ function Post({ content }) {
             // showComment={showComment} handleComment={handleComment}
             commentscount={content.comments.length}
             postId={content.id}
-            authorId={content.authorId}
+            userId={userId}
           />
         </div>
       </div>
