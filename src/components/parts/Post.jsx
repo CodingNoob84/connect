@@ -1,21 +1,18 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { BiComment, BiLike, BiDislike } from "react-icons/bi";
-import { ImArrowUp, ImArrowDown } from "react-icons/im";
+
 import { PiShareFat } from "react-icons/pi";
 import { getTimeAgo } from "@/helper/timehelper";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Commentsection from "./Commentsection";
+import Likesection from "./Likesection";
 
 function Post({ content, userId }) {
   return (
     <div className="border border-b-gray-400 bg-white flex flex-row">
-      <div className="bg-slate-200 w-14 flex flex-col justify-start items-center text-xl py-2 gap-2">
-        <ImArrowUp className="text-red-500 scale-75 hover:scale-100 hover:text-red-400 cursor-pointer" />
-        <div className="text-sm">20</div>{" "}
-        <ImArrowDown className="scale-75 hover:scale-100 hover:text-red-400 cursor-pointer" />
-      </div>
+      <Likesection postId={content.id} userId={userId} likes={content.likes} />
       <div className="flex-1">
         <div className="flex flex-col gap-2">
           <div className="p-2">

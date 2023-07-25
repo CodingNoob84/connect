@@ -47,6 +47,7 @@ model User {
   sessions      Session[]
   posts         Post[]
   comments      Comment[] @relation("UserComments")
+  likes         Like[]    @relation("UserLikes")
 }
 
 model Post {
@@ -58,6 +59,7 @@ model Post {
   author      User?     @relation(fields: [authorId], references: [id])
   authorId    String?
   comments    Comment[] @relation("PostComments")
+  likes       Like[]    @relation("PostLikes")
 }
 
 model Comment {
@@ -69,4 +71,15 @@ model Comment {
   postId    String?
   author    User?    @relation("UserComments", fields: [authorId], references: [id])
   authorId  String?
+}
+
+model Like {
+  id        String   @id @default(cuid()) @map("_id")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isLiked   String
+  user      User     @relation("UserLikes", fields: [userId], references: [id])
+  userId    String
+  post      Post     @relation("PostLikes", fields: [postId], references: [id])
+  postId    String
 }

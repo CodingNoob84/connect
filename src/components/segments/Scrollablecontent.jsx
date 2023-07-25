@@ -14,7 +14,6 @@ function Scrollablecontent({ userId }) {
 
   const {
     data,
-    isLoading,
     isSuccess,
     error,
     fetchNextPage,
@@ -50,7 +49,7 @@ function Scrollablecontent({ userId }) {
     <div className="flex flex-col gap-2">
       <Createpost userId={userId} />
       <div className="flex flex-col gap-4">
-        {isFetching &&
+        {status === "loading" &&
           Array.from({ length: 5 }).map((_, i) => <SkeletonPost key={i} />)}
         {isSuccess &&
           data.pages.map((page) =>

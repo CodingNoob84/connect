@@ -56,6 +56,13 @@ export async function GET(request){
                   id: true, // Selecting the comment ID to include it in the response
                 },
               },
+              likes:{
+                select:{
+                  userId:true,
+                  isLiked:true
+                }
+              },
+ 
               
             },
             orderBy: {

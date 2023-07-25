@@ -44,6 +44,17 @@ export async function createComment(data){
 }
 }
 
+export async function crudLikes(data){
+  try{
+    const response = await axios.post('api/like', data);
+    return response.data;
+  }
+  catch (error) {
+    console.error("Error fetching posts:", error.message);
+    return [];
+}
+}
+
 export async function getComments(id){
   try{
     if(id){

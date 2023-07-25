@@ -33,7 +33,7 @@ function Navbar({ session }) {
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-slate-200">
-            <DropdownMenuLabel>Karthik kumar</DropdownMenuLabel>
+            <DropdownMenuLabel>{session?.user?.name}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Billing</DropdownMenuItem>
