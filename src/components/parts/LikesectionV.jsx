@@ -2,6 +2,15 @@
 import { crudLikes } from "@/lib/dbservices";
 import React, { useState } from "react";
 import { ImArrowUp, ImArrowDown } from "react-icons/im";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import Likesmodal from "./Likesmodal";
 
 function getIsLikedForUserId(likes, userId) {
   const likeEntry = likes.find((like) => like.userId === userId);
@@ -25,7 +34,7 @@ function totalIsLiked(likes) {
   return countIsLiked1 - countIsLiked0;
 }
 
-function Likesection({ likes, userId, postId }) {
+function LikesectionV({ likes, userId, postId }) {
   const [likesArray, setLikesArray] = useState(likes);
   const [isLiked, setIsLiked] = useState(
     getIsLikedForUserId(likesArray, userId)
@@ -61,9 +70,18 @@ function Likesection({ likes, userId, postId }) {
         }  scale-75 hover:scale-100 hover:text-red-400 cursor-pointer`}
         onClick={() => handleLike("1")}
       />
-      <div className="text-sm cursor-pointer w-7 h-7 rounded-full flex justify-center items-center hover:bg-slate-300">
-        <p className="text-center">{totalIsLiked(likesArray)}</p>
-      </div>{" "}
+      <Dialog>
+        <DialogTrigger>
+          <div className="text-sm cursor-pointer w-7 h-7 rounded-full flex justify-center items-center hover:bg-slate-300">
+            <p className="text-center">{totalIsLiked(likesArray)}</p>
+          </div>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <Likesmodal postId={postId} />
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>{" "}
       <ImArrowDown
         className={`${
           isLiked === "0" && "text-red-500"
@@ -74,4 +92,4 @@ function Likesection({ likes, userId, postId }) {
   );
 }
 
-export default Likesection;
+export default LikesectionV;

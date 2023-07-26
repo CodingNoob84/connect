@@ -70,3 +70,21 @@ export async function getComments(id){
     return [];
 }
 }
+
+export async function getLikes(id){
+  try{
+    if(id){
+      //console.log(id)
+      const response = await axios.get(`api/post/${id}/likes`);
+      //console.log(response)
+      return response.data;
+    }else{
+      return []
+    }
+    
+  }
+  catch (error) {
+    console.error("Error fetching posts:", error.message);
+    return [];
+}
+}

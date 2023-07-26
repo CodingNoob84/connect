@@ -11,8 +11,10 @@ import axios from "axios";
 import { Skeleton } from "../ui/skeleton";
 import { getTimeAgo } from "@/helper/timehelper";
 import { useSession } from "next-auth/react";
+import LikesectionH from "./LikesectionH";
 
-function Commentsection({ commentscount, postId, userId }) {
+function Bottomsection({ likes, commentscount, postId, userId }) {
+  //console.log(likes);
   const datasession = useSession();
   //console.log(datasession);
   //console.log(datasession.data.user.id);
@@ -76,13 +78,14 @@ function Commentsection({ commentscount, postId, userId }) {
   }, [comments, iscommentsLoading]);
 
   return (
-    <div>
+    <div className="bg-slate-100">
       <div className="flex flex-row gap-3 text-sm p-2">
-        <div className="flex flex-row justify-center items-center gap-2 cursor-pointer">
-          <BiComment
-            className="scale-80 hover:scale-120 "
-            onClick={() => handleComment(postId)}
-          />
+        <LikesectionH postId={postId} userId={userId} likes={likes} />
+        <div
+          className="flex flex-row justify-center items-center gap-2 cursor-pointer"
+          onClick={() => handleComment(postId)}
+        >
+          <BiComment className="scale-80 hover:scale-120 " />
           <div>{commentCount} comments</div>
         </div>
         <div className="flex flex-row justify-center items-center gap-2 cursor-pointer">
@@ -124,7 +127,7 @@ function Commentsection({ commentscount, postId, userId }) {
               ))
             )}
           </div>
-          <div className="bg-slate-200 flex flex-row gap-4 p-2">
+          <div className=" flex flex-row gap-4 p-2">
             <Input ref={commentref} placeholder="comment...." />
             <Button
               onClick={() => handleCreateComment()}
@@ -140,4 +143,4 @@ function Commentsection({ commentscount, postId, userId }) {
   );
 }
 
-export default Commentsection;
+export default Bottomsection;
