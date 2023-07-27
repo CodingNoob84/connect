@@ -111,3 +111,13 @@ export async function getUser(id) {
     return [];
   }
 }
+
+export async function getUsers() {
+  try {
+    const response = await axios.get(`/api/user`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching posts:", error.message);
+    return [];
+  }
+}

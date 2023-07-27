@@ -27,7 +27,7 @@ export default async function RootLayout({ children }) {
           <AuthProvider>
             <main className="max-w-screen min-h-screen bg-slate-100 p-2">
               <Navbar session={session} />
-              {children}
+              <div className="mt-[60px]">{children}</div>
             </main>
           </AuthProvider>
         </ReactQueryProvider>
