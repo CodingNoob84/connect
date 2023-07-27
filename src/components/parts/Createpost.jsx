@@ -17,13 +17,7 @@ import {
 
 import { createPost, fetchPosts, getPosts } from "@/lib/dbservices";
 
-function Createpost({ userId }) {
-  const { refetch } = useInfiniteQuery({
-    queryKey: ["posts"],
-    queryFn: () => getPosts(1),
-  });
-  //const [userId, setUserId] = useState("clk84hncy0000jfyoljzhmmev");
-  const [cpShow, setCpShow] = useState(false);
+function Createpost({ userId, setCpShow, refetch }) {
   const [loading, setLoading] = useState(false);
 
   const titleref = useRef();
@@ -34,20 +28,11 @@ function Createpost({ userId }) {
       setLoading(true);
     },
     onSuccess: (data) => {
-      console.log("Post created successfully!");
-      console.log(data);
+      //console.log("Post created successfully!");
+      //console.log(data);
       setLoading(false);
       onCloseCP();
       refetch();
-      // const newPost = data; // Replace this with the actual data received from the mutation
-      // QueryCache.setQueryData("posts", (oldData) => ({
-      //   ...oldData,
-      //   pages: [
-      //     // Add the new post as the first data in the first page
-      //     [newPost, ...oldData.pages[0]],
-      //     ...oldData.pages.slice(1), // Append the rest of the pages
-      //   ],
-      // }));
     },
     onError: (error) => {
       console.error("Error creating post:", error);
@@ -71,39 +56,27 @@ function Createpost({ userId }) {
     setCpShow(false);
   };
   return (
-    <div className="flex flex-col gap-2">
+    <div className="border border-b-gray-400 bg-white p-4 flex flex-col gap-2">
+      <Input ref={titleref} placeholder="Title..." />
+      <Textarea ref={descref} placeholder="Description..." />
       <div className="flex flex-row justify-between">
-        <Button className="text-sm h-7" onClick={() => setCpShow(!cpShow)}>
-          Create New Post
-        </Button>
-        <Button className="text-sm h-7" onClick={() => refetch()}>
-          Refresh
-        </Button>
-      </div>
-      {cpShow && (
-        <div className="border border-b-gray-400 bg-white p-4 flex flex-col gap-2">
-          <Input ref={titleref} placeholder="Title..." />
-          <Textarea ref={descref} placeholder="Description..." />
-          <div className="flex flex-row justify-between">
-            <div className="flex flex-row gap-5 items-center">
-              <div className="w-[24px] h-[24px] bg-slate-200 scale-90 hover:scale-110 flex justify-center rounded-full items-center">
-                <BiLink />
-              </div>
-              <div className="w-[24px] h-[24px] bg-slate-200 scale-90 hover:scale-110 flex justify-center rounded-full items-center">
-                <BsImageFill />
-              </div>
-            </div>
-            <Button
-              className="text-sm h-7"
-              loading={loading}
-              loadingtext={"Please wait"}
-              onClick={() => handleCreatePost()}
-            >
-              Create new Post
-            </Button>
+        <div className="flex flex-row gap-5 items-center">
+          <div className="w-[24px] h-[24px] bg-slate-200 scale-90 hover:scale-110 flex justify-center rounded-full items-center">
+            <BiLink />
+          </div>
+          <div className="w-[24px] h-[24px] bg-slate-200 scale-90 hover:scale-110 flex justify-center rounded-full items-center">
+            <BsImageFill />
           </div>
         </div>
-      )}
+        <Button
+          className="text-sm h-7"
+          loading={loading}
+          loadingtext={"Please wait"}
+          onClick={() => handleCreatePost()}
+        >
+          Create new Post
+        </Button>
+      </div>
     </div>
   );
 }

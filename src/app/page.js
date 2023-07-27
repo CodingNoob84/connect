@@ -1,4 +1,4 @@
-import Bodycontent from "@/components/segments/Bodycontent";
+import HomePageBodyContent from "@/components/segments/HomePageBodyContent";
 import Footer from "@/components/segments/Footer";
 import Navbar from "@/components/segments/Navbar";
 import { getServerSession } from "next-auth";
@@ -17,15 +17,10 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
   const session = await getServerSession(AuthOptions);
-  console.log(session)
-  if(!session){
-    redirect("/login")
-  }
   return (
-    <main className="max-w-screen min-h-screen bg-slate-100 p-2">
-      <Navbar session={session} />
-      <Bodycontent userId={session?.user?.id} />
+    <div>
+      <HomePageBodyContent userId={session?.user?.id} />
       <Footer />
-    </main>
+    </div>
   );
 }

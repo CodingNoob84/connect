@@ -3,7 +3,7 @@ import Leftsidebar from "./Leftsidebar";
 import Scrollablecontent from "./Scrollablecontent";
 import Rightsidebar from "./Rightsidebar";
 
-function Bodycontent({ userId }) {
+function HomePageBodyContent({ userId }) {
   return (
     <div className="m-2 flex-1 justify-between text-sm">
       <div className="w-full m-auto flex flex-row">
@@ -21,4 +21,4 @@ function Bodycontent({ userId }) {
   );
 }
 
-export default Bodycontent;
+export default HomePageBodyContent;

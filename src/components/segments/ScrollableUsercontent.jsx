@@ -5,14 +5,21 @@ import Createpost from "../parts/Createpost";
 import Post from "../parts/Post";
 import { Button } from "../ui/button";
 import axios from "axios";
-import { fetchPosts, getComments, getPosts } from "@/lib/dbservices";
+import {
+  fetchPosts,
+  getComments,
+  getPosts,
+  getUserPosts,
+} from "@/lib/dbservices";
 import SkeletonPost from "../parts/Skeletonpost";
 import { useInView } from "react-intersection-observer";
+import { useSession } from "next-auth/react";
 
-function Scrollablecontent({ userId }) {
+function ScrollableUsercontent({ authorId }) {
   const [cpShow, setCpShow] = useState(false);
   const { ref, inView } = useInView();
-
+  const session = useSession();
+  //console.log(session);
   const {
     data,
     isSuccess,
@@ -23,8 +30,8 @@ function Scrollablecontent({ userId }) {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ["posts"],
-    queryFn: ({ pageParam = 1 }) => getPosts(pageParam),
+    queryKey: ["posts", authorId],
+    queryFn: ({ pageParam = 1 }) => getUserPosts(pageParam, authorId),
     getNextPageParam: (lastPage, allPages) => {
       const nextPage = lastPage.length === 5 ? allPages.length + 1 : undefined;
       return nextPage;
@@ -35,23 +42,36 @@ function Scrollablecontent({ userId }) {
     fetchNextPage();
   };
   const { refetch } = useInfiniteQuery({
-    queryKey: ["posts"],
-    queryFn: () => getPosts(1),
+    queryKey: ["posts", authorId],
+    queryFn: () => getUserPosts(1, authorId),
   });
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-col gap-2">
         <div className="flex flex-row justify-between">
-          <Button className="text-sm h-7" onClick={() => setCpShow(!cpShow)}>
-            Create New Post
-          </Button>
+          <div>
+            {session.status != "loading" &&
+              session.data.user.id === authorId && (
+                <Button
+                  className="text-sm h-7"
+                  onClick={() => setCpShow(!cpShow)}
+                >
+                  Create New Post
+                </Button>
+              )}
+          </div>
+
           <Button className="text-sm h-7" onClick={() => refetch()}>
             Refresh
           </Button>
         </div>
         {cpShow && (
-          <Createpost userId={userId} setCpShow={setCpShow} refetch={refetch} />
+          <Createpost
+            userId={authorId}
+            setCpShow={setCpShow}
+            refetch={refetch}
+          />
         )}
       </div>
       <div className="flex flex-col gap-4">
@@ -63,7 +83,7 @@ function Scrollablecontent({ userId }) {
               <Post
                 key={post.id} // Ensure the key prop is set to a unique value
                 content={post}
-                userId={userId}
+                userId={authorId}
               />
             ))
           )}
@@ -80,4 +100,4 @@ function Scrollablecontent({ userId }) {
   );
 }
 
-export default Scrollablecontent;
+export default ScrollableUsercontent;

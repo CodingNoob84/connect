@@ -11,12 +11,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Image from "next/image";
+import Link from "next/link";
 
 function Navbar({ session }) {
   return (
-    <div className="m-2 border border-slate-400 rounded-sm flex justify-between p-2">
-      <div className="text-2xl flex justify-center items-center">Connect</div>
-      <div>
+    <div className="m-2 border border-slate-400 rounded-sm flex justify-between bg-slate-100 p-2">
+      <div className="text-2xl flex justify-center items-center">
+        <Link href="/">
+          <Image src="/connect-logo.png" alt="Logo" width={150} height={80} />
+        </Link>
+      </div>
+      <div className="flex justify-center items-center">
         <DropdownMenu className="focus:outline-none">
           <DropdownMenuTrigger>
             <Avatar>

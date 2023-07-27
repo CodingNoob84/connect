@@ -112,12 +112,15 @@ function Bottomsection({ likes, commentscount, postId, userId }) {
             ) : (
               comments?.map((comment) => (
                 <div key={comment.id}>
-                  <div className="flex flex-row gap-2">
-                    <Avatar className="h-4 w-4">
-                      <AvatarImage src={comment.author.image} />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <div>{comment.author.name}</div>
+                  <div className="flex flex-row justify-between">
+                    <div className="flex flex-row gap-2">
+                      <Avatar className="h-4 w-4">
+                        <AvatarImage src={comment.author.image} />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                      <div>{comment.author.name}</div>
+                    </div>
+
                     <div className="text-xs">
                       {getTimeAgo(comment.updatedAt)}
                     </div>

@@ -1,39 +1,50 @@
-import NextAuth from "next-auth"
+import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/helper/prismaclient";
 
-export const AuthOptions={
-    secret: process.env.NEXTAUTH_SECRET,
-    adapter: PrismaAdapter(prisma),
-    providers: [
-        GoogleProvider({
-          clientId: process.env.GOOGLE_CLIENT_ID,
-          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        }),
-      ],
-      session:{
-        strategy:"jwt"
-      },
-      callbacks:{
-        async signin({user,account,profile,email,credentials}){
-          return true
-        },
-        async jwt({token,account,user}){
-          if(user){
-            token.id=user.id
-          }
-          return token
-        },
-        async session({token, session}){
-          if(token){
-            session.user.id=token.id
-          }
-          return session
-        }
+export const AuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+  ],
+  session: {
+    strategy: "jwt",
+  },
+
+  events: {
+    signIn: async (message) => {
+      // This function will be called when a user signs in
+      console.log("User signed in:", message);
+    },
+    signOut: async (message) => {
+      // This function will be called when a user signs out
+      console.log("User signed out:", message);
+    },
+  },
+  callbacks: {
+    async signin({ user, account, profile, email, credentials }) {
+      return true;
+    },
+    async jwt({ token, account, user }) {
+      if (user) {
+        token.id = user.id;
       }
-}
+      return token;
+    },
+    async session({ token, session }) {
+      if (token) {
+        session.user.id = token.id;
+      }
+      return session;
+    },
+  },
+};
 
 const handler = NextAuth(AuthOptions);
 
-export { handler as GET, handler as POST};
+export { handler as GET, handler as POST };

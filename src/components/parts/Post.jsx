@@ -8,6 +8,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Bottomsection from "./Bottomsection";
 import LikesectionV from "./LikesectionV";
+import Link from "next/link";
 
 function Post({ content, userId }) {
   return (
@@ -30,7 +31,9 @@ function Post({ content, userId }) {
                   <AvatarImage src={content.author.image} />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
-                <div className="text-md">{content.author.name}</div>
+                <Link href={`/user/${content.author.id}`} className="text-md">
+                  {content.author.name}
+                </Link>
               </div>
 
               <div className="text-xs">{getTimeAgo(content.updatedAt)}</div>
