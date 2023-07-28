@@ -3,7 +3,7 @@ import Footer from "@/components/segments/Footer";
 import Navbar from "@/components/segments/Navbar";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
-import { AuthOptions } from "./api/auth/[...nextauth]/route";
+import { AuthOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 
 // const session={

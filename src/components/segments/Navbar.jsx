@@ -42,9 +42,14 @@ function Navbar({ session }) {
             <DropdownMenuContent className="bg-slate-200">
               <DropdownMenuLabel>{session?.user?.name}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href={`/user/${session?.user?.id}`}>Profile</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                {" "}
+                <Link href={`/user`}>Users</Link>
+              </DropdownMenuItem>
+              {/* <DropdownMenuItem>Team</DropdownMenuItem> */}
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => signOut()}>
                 Log Out
